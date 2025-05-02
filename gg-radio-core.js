@@ -13,7 +13,7 @@ console.log("🎵 Core script running");
     console.log("✅ Found #audio-widget-container");
   }
 
-  // Clear any previous player
+  // Clear any previous player to avoid multiple audio instances
   const existingPlayer = document.getElementById("floating-audio-player");
   if (existingPlayer) {
     existingPlayer.remove();
@@ -76,16 +76,19 @@ console.log("🎵 Core script running");
 
   // Ensure the audio continues across pages
   if (!existingContainer) {
-    // Persist the audio player across pages (add it to the body)
-    const persistentAudioPlayer = document.createElement("audio");
-    persistentAudioPlayer.src = "https://ggboda.com/wp-content/uploads/2025/03/Camilo-La-Boda.mp3";
-    persistentAudioPlayer.id = "persistent-audio-player";
-    persistentAudioPlayer.loop = true;
-    persistentAudioPlayer.autoplay = true;
-    persistentAudioPlayer.volume = 1.0;
-    persistentAudioPlayer.muted = false; // Unmuted
-    document.body.appendChild(persistentAudioPlayer);
-    persistentAudioPlayer.play();
-    console.log("✅ Persistent audio player added.");
+    // Only create persistent player if it doesn't already exist
+    const persistentAudioPlayer = document.getElementById("persistent-audio-player");
+    if (!persistentAudioPlayer) {
+      const persistentAudio = document.createElement("audio");
+      persistentAudio.src = "https://ggboda.com/wp-content/uploads/2025/03/Camilo-La-Boda.mp3";
+      persistentAudio.id = "persistent-audio-player";
+      persistentAudio.loop = true;
+      persistentAudio.autoplay = true;
+      persistentAudio.volume = 1.0;
+      persistentAudio.muted = false; // Unmuted
+      document.body.appendChild(persistentAudio);
+      persistentAudio.play();
+      console.log("✅ Persistent audio player added.");
+    }
   }
 })();
