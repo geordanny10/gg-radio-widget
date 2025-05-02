@@ -1,9 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("Radio core loaded!");
+  console.log("🎵 Core script running");
 
-document.addEventListener("DOMContentLoaded", function () {
-  const widgetContainer = document.getElementById("audio-widget-container");
-  if (!widgetContainer) return;
+  let widgetContainer = document.getElementById("audio-widget-container");
+  if (!widgetContainer) {
+    console.warn("❌ No #audio-widget-container found. Creating one...");
+    widgetContainer = document.createElement("div");
+    widgetContainer.id = "audio-widget-container";
+    document.body.appendChild(widgetContainer);
+  } else {
+    console.log("✅ Found #audio-widget-container");
+  }
 
   const player = document.createElement("div");
   player.id = "floating-audio-player";
@@ -15,37 +21,31 @@ document.addEventListener("DOMContentLoaded", function () {
   const audio = document.createElement("audio");
   audio.id = "background-music";
   audio.controls = true;
+  audio.autoplay = true;
   audio.preload = "auto";
   audio.muted = true;
-
-  // Try to autoplay and unmute later
-  const attemptPlay = () => {
-    audio.play().then(() => {
-      audio.muted = false;
-    }).catch(() => {
-      // Wait for user interaction
-      const userStart = () => {
-        audio.muted = false;
-        audio.play();
-        document.removeEventListener('click', userStart);
-        document.removeEventListener('touchstart', userStart);
-      };
-      document.addEventListener('click', userStart);
-      document.addEventListener('touchstart', userStart);
-    });
-  };
-
-  attemptPlay();
+  audio.setAttribute("playsinline", "");
 
   const source = document.createElement("source");
   source.src = "https://ggboda.com/wp-content/uploads/2025/03/Camilo-La-Boda.mp3";
   source.type = "audio/mpeg";
   audio.appendChild(source);
 
-  player.appendChild(songTitle);
-  player.appendChild(audio);
-  widgetContainer.appendChild(player);
+  audio.play().then(() => {
+    console.log("✅ Autoplay started (muted)");
+  }).catch((e) => {
+    console.warn("⚠️ Autoplay failed, waiting for user interaction...");
+    audio.muted = false;
+    const resumeOnTap = () => {
+      audio.play().then(() => {
+        console.log("✅ Playback started after user tap");
+        document.body.removeEventListener("click", resumeOnTap);
+      });
+    };
+    document.body.addEventListener("click", resumeOnTap);
+  });
 
+  // Save position
   const key = "gg-radio-time";
   const savedTime = localStorage.getItem(key);
   if (savedTime) {
@@ -55,7 +55,9 @@ document.addEventListener("DOMContentLoaded", function () {
   audio.addEventListener("timeupdate", function () {
     localStorage.setItem(key, audio.currentTime);
   });
+
+  player.appendChild(songTitle);
+  player.appendChild(audio);
+  widgetContainer.appendChild(player);
+  console.log("✅ Player added to DOM");
 });
-
-
-                          });
