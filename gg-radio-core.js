@@ -32,9 +32,9 @@ console.log("🎵 Core script running");
   audio.controls = true;
   audio.autoplay = true;
   audio.preload = "auto";
-  audio.loop = true;
-  audio.muted = true; // Start muted to avoid autoplay restrictions
-  audio.volume = 1.0;
+  audio.loop = true; // Loop the song
+  audio.muted = false; // Unmuted from the start
+  audio.volume = 1.0; // Full volume
   console.log("🎧 Audio element created.");
 
   const source = document.createElement("source");
@@ -48,29 +48,29 @@ console.log("🎵 Core script running");
   container.appendChild(player);
   console.log("✅ Player added to DOM");
 
-  // Start muted autoplay
+  // Start playback if not blocked
   audio.play().then(() => {
-    console.log("✅ Autoplay started (muted)");
+    console.log("✅ Audio started playing (unmuted)");
   }).catch((e) => {
-    console.warn("⚠️ Autoplay blocked:", e);
+    console.warn("⚠️ Autoplay blocked. User interaction required:", e);
   });
 
-  // Unmute after a small delay (for desktop and mobile)
-  let audioUnmuted = false;
-  setTimeout(() => {
-    if (!audioUnmuted) {
-      audio.muted = false;
-      audio.play().then(() => {
-        console.log("🔊 Audio unmuted and playing.");
-        audioUnmuted = true; // Prevent multiple unmute triggers
-      }).catch((e) => {
-        console.warn("⚠️ Error while unmuting:", e);
-      });
-    }
-  }, 1000); // 1 second delay after autoplay starts to unmute
+  // Save and restore the playback position
+  const key = "gg-radio-time";
+  const savedTime = localStorage.getItem(key);
+  if (savedTime) {
+    audio.currentTime = parseFloat(savedTime);
+    console.log(`🎧 Resuming from saved time: ${savedTime} seconds`);
+  }
+
+  // Save current time to localStorage every time it updates
+  audio.addEventListener("timeupdate", () => {
+    localStorage.setItem(key, audio.currentTime);
+  });
 
   // Reset to beginning on full reload
   window.addEventListener("beforeunload", () => {
+    localStorage.removeItem(key); // Optionally clear saved time on page reload
     audio.currentTime = 0;
   });
 })();
