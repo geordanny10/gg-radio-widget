@@ -56,13 +56,17 @@ console.log("🎵 Core script running");
   });
 
   // Unmute after a small delay (for desktop and mobile)
+  let audioUnmuted = false;
   setTimeout(() => {
-    audio.muted = false;
-    audio.play().then(() => {
-      console.log("🔊 Audio unmuted and playing.");
-    }).catch((e) => {
-      console.warn("⚠️ Error while unmuting:", e);
-    });
+    if (!audioUnmuted) {
+      audio.muted = false;
+      audio.play().then(() => {
+        console.log("🔊 Audio unmuted and playing.");
+        audioUnmuted = true; // Prevent multiple unmute triggers
+      }).catch((e) => {
+        console.warn("⚠️ Error while unmuting:", e);
+      });
+    }
   }, 1000); // 1 second delay after autoplay starts to unmute
 
   // Reset to beginning on full reload
