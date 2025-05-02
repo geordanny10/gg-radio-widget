@@ -40,6 +40,7 @@
   audio.autoplay = true;
   audio.preload = 'auto';
   audio.muted = true;  // Start muted (due to autoplay restrictions on mobile)
+  audio.loop = true;   // Make sure the audio loops after it finishes
 
   // Attempt to start playback
   audio.play().then(() => {
@@ -71,6 +72,9 @@
   console.log('🎧 Audio element created');
   console.log('🎧 Source element added');
   console.log('✅ Player added to DOM');
+
+  // Ensure audio starts from the beginning on a full reload
+  localStorage.removeItem('gg-radio-time'); // Clear saved time to reset the playback position
 
   // Remember the last playback position using localStorage
   const key = 'gg-radio-time';
