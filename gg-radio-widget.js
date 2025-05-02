@@ -1,11 +1,17 @@
-console.log("🎧 Widget script loaded!");
+(function () {
+  const head = document.head;
 
-const testDiv = document.createElement("div");
-testDiv.textContent = "Test Widget Loaded";
-testDiv.style.position = "fixed";
-testDiv.style.bottom = "10px";
-testDiv.style.left = "10px";
-testDiv.style.padding = "10px";
-testDiv.style.background = "red";
-testDiv.style.color = "white";
-document.body.appendChild(testDiv);
+  // Load CSS
+  const styleLink = document.createElement("link");
+  styleLink.rel = "stylesheet";
+  styleLink.href = "https://gg-radio-widget.vercel.app/gg-radio-style.css";
+  head.appendChild(styleLink);
+
+  // Load core JS after CSS loads
+  const script = document.createElement("script");
+  script.src = "https://gg-radio-widget.vercel.app/gg-radio-core.js";
+  script.defer = true;
+  script.onload = () => console.log("🎧 Core audio player loaded!");
+  script.onerror = () => console.error("Failed to load core audio player.");
+  head.appendChild(script);
+})();
