@@ -1,16 +1,11 @@
-// Loader script: Injects style and logic dynamically
-(function () {
-  const head = document.head;
+console.log("🎧 Widget script loaded!");
 
-  // Load CSS
-  const styleLink = document.createElement("link");
-  styleLink.rel = "stylesheet";
-  styleLink.href = "https://gg-radio-widget.vercel.app/gg-radio-style.css"; // Replace with final CDN if needed
-  head.appendChild(styleLink);
-
-  // Load core JS
-  const script = document.createElement("script");
-  script.src = "https://gg-radio-widget.vercel.app/gg-radio-core.js"; // Replace with final CDN if needed
-  script.defer = true;
-  head.appendChild(script);
-})();
+const testDiv = document.createElement("div");
+testDiv.textContent = "Test Widget Loaded";
+testDiv.style.position = "fixed";
+testDiv.style.bottom = "10px";
+testDiv.style.left = "10px";
+testDiv.style.padding = "10px";
+testDiv.style.background = "red";
+testDiv.style.color = "white";
+document.body.appendChild(testDiv);
