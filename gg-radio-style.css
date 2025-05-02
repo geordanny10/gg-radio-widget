@@ -1,53 +1,56 @@
 #floating-audio-player {
   position: fixed;
-  bottom: 16px;
+  bottom: 30px; /* Adjusted from 16px to bring it down more */
   left: 50%;
   transform: translateX(-50%);
   z-index: 9999;
   background: rgba(161, 61, 45, .8);
-  padding: 10px 20px;
+  padding: 12px 24px; /* Adjusted padding to make it look better with a wider player */
   border-radius: 14px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
   font-family: 'Mate', serif;
-  width: auto;
-  margin-bottom: 70px !important;
+  width: 500px; /* Set to a fixed width for better control */
+  max-width: 90vw; /* Ensure it doesn't go beyond screen width */
+  margin-bottom: 70px;
 }
 
 .song-title {
   font-weight: 600;
-  font-size: 12px;
+  font-size: 14px; /* Slightly increased font size */
   margin-bottom: 6px;
   line-height: 1.2;
   color: white;
 }
 
 audio {
-  width: 480px;
-  max-width: 90vw;
+  width: 100%; /* Ensure the audio player takes up the full width of the container */
+  max-width: 100%;
 }
 
 @media (max-width: 768px) {
   #floating-audio-player {
-    padding: 8px 12px;
-    border-radius: 8px;
+    padding: 10px 18px; /* Adjusted for smaller screens */
+    border-radius: 12px;
+    width: 400px; /* Reduced width for medium screens */
   }
   .song-title {
     font-size: 12px;
   }
   audio {
-    width: 250px;
+    width: 100%;
   }
 }
 
 @media (max-width: 480px) {
   #floating-audio-player {
-    padding: 6px 10px;
+    padding: 8px 14px; /* Adjusted for smaller screens */
+    width: 320px; /* Reduced width for small screens */
   }
   .song-title {
     font-size: 10px;
   }
   audio {
-    width: 200px;
+    width: 100%;
   }
 }
