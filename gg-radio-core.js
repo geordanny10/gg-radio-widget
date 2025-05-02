@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
+  console.log("Radio core loaded!");
+
+document.addEventListener("DOMContentLoaded", function () {
   const widgetContainer = document.getElementById("audio-widget-container");
   if (!widgetContainer) return;
 
@@ -53,3 +56,6 @@ document.addEventListener("DOMContentLoaded", function () {
     localStorage.setItem(key, audio.currentTime);
   });
 });
+
+
+                          });
