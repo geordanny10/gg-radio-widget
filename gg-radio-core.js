@@ -12,14 +12,23 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("✅ Found #audio-widget-container");
   }
 
+  // Log if we reached the next step of creating the player
+  console.log("🛠 Creating the player...");
+
   // Create the audio player container
   const player = document.createElement("div");
   player.id = "floating-audio-player";
+
+  // Log to confirm player creation
+  console.log("🎧 Player container created.");
 
   // Create song title
   const songTitle = document.createElement("div");
   songTitle.className = "song-title";
   songTitle.textContent = "Camilo - La Boda";
+
+  // Log to confirm song title creation
+  console.log("🎵 Song title created.");
 
   // Create audio element
   const audio = document.createElement("audio");
@@ -30,11 +39,17 @@ document.addEventListener("DOMContentLoaded", function () {
   audio.muted = true;
   audio.setAttribute("playsinline", ""); // Important for mobile devices
 
+  // Log to confirm audio element creation
+  console.log("🎧 Audio element created.");
+
   // Create source element
   const source = document.createElement("source");
   source.src = "https://ggboda.com/wp-content/uploads/2025/03/Camilo-La-Boda.mp3";
   source.type = "audio/mpeg";
   audio.appendChild(source);
+
+  // Log source element creation
+  console.log("🎧 Source element added.");
 
   // Attempt to autoplay
   audio.play().then(() => {
@@ -68,5 +83,6 @@ document.addEventListener("DOMContentLoaded", function () {
   player.appendChild(audio);
   widgetContainer.appendChild(player);
 
+  // Log to confirm everything was added to the DOM
   console.log("✅ Player added to DOM");
 });
