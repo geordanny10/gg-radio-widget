@@ -29,6 +29,7 @@ console.log("🎵 Core script running");
   console.log("🎵 Song title created.");
 
   const audio = document.createElement("audio");
+  audio.id = "audio-player"; // Assign unique ID for the hidden audio player
   audio.controls = true;
   audio.autoplay = true;
   audio.preload = "auto";
@@ -68,9 +69,23 @@ console.log("🎵 Core script running");
     localStorage.setItem(key, audio.currentTime);
   });
 
-  // Reset to beginning on full reload
+  // Check if we are navigating to a different page
   window.addEventListener("beforeunload", () => {
-    localStorage.removeItem(key); // Optionally clear saved time on page reload
-    audio.currentTime = 0;
+    localStorage.setItem(key, audio.currentTime); // Save current time on page unload
   });
+
+  // Ensure the audio continues across pages
+  if (!existingContainer) {
+    // Persist the audio player across pages (add it to the body)
+    const persistentAudioPlayer = document.createElement("audio");
+    persistentAudioPlayer.src = "https://ggboda.com/wp-content/uploads/2025/03/Camilo-La-Boda.mp3";
+    persistentAudioPlayer.id = "persistent-audio-player";
+    persistentAudioPlayer.loop = true;
+    persistentAudioPlayer.autoplay = true;
+    persistentAudioPlayer.volume = 1.0;
+    persistentAudioPlayer.muted = false; // Unmuted
+    document.body.appendChild(persistentAudioPlayer);
+    persistentAudioPlayer.play();
+    console.log("✅ Persistent audio player added.");
+  }
 })();
