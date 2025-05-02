@@ -1,94 +1,80 @@
-console.log("🎵 Core script running");
-
 (function () {
-  const existingContainer = document.getElementById("audio-widget-container");
-  let container = existingContainer;
+  const audioPlayerContainer = document.createElement('div');
+  audioPlayerContainer.id = 'audio-widget-container';
+  document.body.appendChild(audioPlayerContainer);
 
-  if (!container) {
-    console.warn("❌ No #audio-widget-container found. Creating one...");
-    container = document.createElement("div");
-    container.id = "audio-widget-container";
-    document.body.appendChild(container);
-  } else {
-    console.log("✅ Found #audio-widget-container");
-  }
+  // Create player elements
+  const audioElement = document.createElement('audio');
+  const playButton = document.createElement('button');
+  playButton.innerText = 'Play';
 
-  // Clear any previous player to avoid multiple audio instances
-  const existingPlayer = document.getElementById("floating-audio-player");
-  if (existingPlayer) {
-    existingPlayer.remove();
-  }
+  audioPlayerContainer.appendChild(playButton);
+  audioPlayerContainer.appendChild(audioElement);
 
-  const player = document.createElement("div");
-  player.id = "floating-audio-player";
-  console.log("🎧 Player container created.");
+  // Song info
+  const songInfo = document.createElement('div');
+  songInfo.id = 'song-title';
+  audioPlayerContainer.appendChild(songInfo);
 
-  const title = document.createElement("div");
-  title.className = "song-title";
-  title.textContent = "Camilo - La Boda";
-  console.log("🎵 Song title created.");
+  const audioSource = document.createElement('source');
+  audioElement.appendChild(audioSource);
 
-  const audio = document.createElement("audio");
-  audio.id = "audio-player"; // Assign unique ID for the hidden audio player
-  audio.controls = true;
-  audio.autoplay = true;
-  audio.preload = "auto";
-  audio.loop = true; // Loop the song
-  audio.muted = false; // Unmuted from the start
-  audio.volume = 1.0; // Full volume
-  console.log("🎧 Audio element created.");
+  // Default audio URL and other properties
+  const audioUrl = 'https://path-to-your-audio-file.mp3';
+  audioElement.src = audioUrl;
+  audioElement.loop = true; // Loop the song
 
-  const source = document.createElement("source");
-  source.src = "https://ggboda.com/wp-content/uploads/2025/03/Camilo-La-Boda.mp3";
-  source.type = "audio/mpeg";
-  audio.appendChild(source);
-  console.log("🎧 Source element added.");
+  // Restore from localStorage
+  const savedTime = localStorage.getItem('audioTime');
+  const savedVolume = localStorage.getItem('audioVolume');
+  const savedSong = localStorage.getItem('audioSong');
+  const songTitle = savedSong || 'Default Song Title'; // If no song is saved, use default
 
-  player.appendChild(title);
-  player.appendChild(audio);
-  container.appendChild(player);
-  console.log("✅ Player added to DOM");
+  songInfo.innerText = songTitle;
 
-  // Start playback if not blocked
-  audio.play().then(() => {
-    console.log("✅ Audio started playing (unmuted)");
-  }).catch((e) => {
-    console.warn("⚠️ Autoplay blocked. User interaction required:", e);
-  });
+  // Apply saved time and volume
+  if (savedTime) audioElement.currentTime = savedTime;
+  if (savedVolume) audioElement.volume = savedVolume;
 
-  // Save and restore the playback position
-  const key = "gg-radio-time";
-  const savedTime = localStorage.getItem(key);
-  if (savedTime) {
-    audio.currentTime = parseFloat(savedTime);
-    console.log(`🎧 Resuming from saved time: ${savedTime} seconds`);
-  }
-
-  // Save current time to localStorage every time it updates
-  audio.addEventListener("timeupdate", () => {
-    localStorage.setItem(key, audio.currentTime);
-  });
-
-  // Check if we are navigating to a different page
-  window.addEventListener("beforeunload", () => {
-    localStorage.setItem(key, audio.currentTime); // Save current time on page unload
-  });
-
-  // Ensure the audio continues across pages
-  if (!existingContainer) {
-    // Only create persistent player if it doesn't already exist
-    const persistentAudioPlayer = document.getElementById("persistent-audio-player");
-    if (!persistentAudioPlayer) {
-      const persistentAudio = document.createElement("audio");
-      persistentAudio.src = "https://ggboda.com/wp-content/uploads/2025/03/Camilo-La-Boda.mp3";
-      persistentAudio.id = "persistent-audio-player";
-      persistentAudio.loop = true;
-      persistentAudio.autoplay = true;
-      persistentAudio.volume = 1.0;
-      persistentAudio.muted = false; // Unmuted
-      document.body.appendChild(persistentAudio);
-      persistentAudio.play();
-      console.log("✅ Persistent audio player added.");
+  // Event listener for play button
+  playButton.addEventListener('click', function () {
+    // Ensure autoplay works by user interaction
+    if (audioElement.paused) {
+      audioElement.play().then(() => {
+        // Unmute the audio when user clicks play
+        audioElement.muted = false;
+        playButton.innerText = 'Pause';
+        // Save song info
+        localStorage.setItem('audioSong', songTitle);
+      }).catch((err) => {
+        console.log('Autoplay failed: ' + err);
+      });
+    } else {
+      audioElement.pause();
+      playButton.innerText = 'Play';
     }
+  });
+
+  // Listen for audio time updates and save to localStorage
+  audioElement.addEventListener('timeupdate', function () {
+    localStorage.setItem('audioTime', audioElement.currentTime);
+  });
+
+  // Save the volume in localStorage
+  audioElement.addEventListener('volumechange', function () {
+    localStorage.setItem('audioVolume', audioElement.volume);
+  });
+
+  // Loop song behavior
+  audioElement.addEventListener('ended', function () {
+    audioElement.currentTime = 0;
+    audioElement.play();
+  });
+
+  // Automatically start playing (if the user has already interacted before)
+  if (savedTime > 0) {
+    audioElement.play().catch((err) => {
+      console.log('Autoplay failed: ' + err);
+    });
   }
 })();
