@@ -55,6 +55,17 @@ console.log("🎵 Core script running");
     console.warn("⚠️ Autoplay blocked:", e);
   });
 
+  // Try unmuting on user interaction
+  const unmuteOnInteraction = () => {
+    audio.muted = false;
+    console.log("🔊 Audio unmuted after interaction");
+    window.removeEventListener("click", unmuteOnInteraction);
+    window.removeEventListener("touchstart", unmuteOnInteraction);
+  };
+
+  window.addEventListener("click", unmuteOnInteraction);
+  window.addEventListener("touchstart", unmuteOnInteraction);
+
   // Reset to beginning on full reload
   window.addEventListener("beforeunload", () => {
     audio.currentTime = 0;
