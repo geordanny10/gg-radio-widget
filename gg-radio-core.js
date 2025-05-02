@@ -33,7 +33,7 @@ console.log("🎵 Core script running");
   audio.autoplay = true;
   audio.preload = "auto";
   audio.loop = true;
-  audio.muted = true;
+  audio.muted = true; // Start muted to avoid autoplay restrictions
   audio.volume = 1.0;
   console.log("🎧 Audio element created.");
 
@@ -55,16 +55,15 @@ console.log("🎵 Core script running");
     console.warn("⚠️ Autoplay blocked:", e);
   });
 
-  // Try unmuting on user interaction
-  const unmuteOnInteraction = () => {
+  // Unmute after a small delay (for desktop and mobile)
+  setTimeout(() => {
     audio.muted = false;
-    console.log("🔊 Audio unmuted after interaction");
-    window.removeEventListener("click", unmuteOnInteraction);
-    window.removeEventListener("touchstart", unmuteOnInteraction);
-  };
-
-  window.addEventListener("click", unmuteOnInteraction);
-  window.addEventListener("touchstart", unmuteOnInteraction);
+    audio.play().then(() => {
+      console.log("🔊 Audio unmuted and playing.");
+    }).catch((e) => {
+      console.warn("⚠️ Error while unmuting:", e);
+    });
+  }, 1000); // 1 second delay after autoplay starts to unmute
 
   // Reset to beginning on full reload
   window.addEventListener("beforeunload", () => {
