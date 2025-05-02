@@ -1,0 +1,53 @@
+#floating-audio-player {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background: rgba(161, 61, 45, .8);
+  padding: 10px 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-family: 'Mate', serif;
+  width: auto;
+  margin-bottom: 70px !important;
+}
+
+.song-title {
+  font-weight: 600;
+  font-size: 12px;
+  margin-bottom: 6px;
+  line-height: 1.2;
+  color: white;
+}
+
+audio {
+  width: 480px;
+  max-width: 90vw;
+}
+
+@media (max-width: 768px) {
+  #floating-audio-player {
+    padding: 8px 12px;
+    border-radius: 8px;
+  }
+  .song-title {
+    font-size: 12px;
+  }
+  audio {
+    width: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  #floating-audio-player {
+    padding: 6px 10px;
+  }
+  .song-title {
+    font-size: 10px;
+  }
+  audio {
+    width: 200px;
+  }
+}
