@@ -1,5 +1,9 @@
 console.log("🎵 Core script running");
 
+// Path to the audio file
+const audioFilePath = "https://ggboda.com/wp-content/uploads/2025/03/Camilo-La-Boda.mp3";
+
+// Function to create the persistent audio player
 (function () {
   const existingContainer = document.getElementById("audio-widget-container");
   let container = existingContainer;
@@ -39,7 +43,7 @@ console.log("🎵 Core script running");
   console.log("🎧 Audio element created.");
 
   const source = document.createElement("source");
-  source.src = "https://ggboda.com/wp-content/uploads/2025/03/Camilo-La-Boda.mp3";
+  source.src = audioFilePath;
   source.type = "audio/mpeg";
   audio.appendChild(source);
   console.log("🎧 Source element added.");
@@ -75,27 +79,26 @@ console.log("🎵 Core script running");
   });
 
   // Ensure the audio continues across pages
-  if (!existingContainer) {
-    // Only create persistent player if it doesn't already exist
-    const persistentAudioPlayer = document.getElementById("persistent-audio-player");
-    if (!persistentAudioPlayer) {
-      const persistentAudio = document.createElement("audio");
-      persistentAudio.src = "https://ggboda.com/wp-content/uploads/2025/03/Camilo-La-Boda.mp3";
-      persistentAudio.id = "persistent-audio-player";
-      persistentAudio.loop = true;
-      persistentAudio.autoplay = true;
-      persistentAudio.volume = 1.0;
-      persistentAudio.muted = false; // Unmuted
-      document.body.appendChild(persistentAudio);
-      persistentAudio.play();
-      console.log("✅ Persistent audio player added.");
-    }
+  const persistentAudioPlayer = document.getElementById("persistent-audio-player");
+  if (!persistentAudioPlayer) {
+    // Create a persistent audio player if it doesn't already exist
+    const persistentAudio = document.createElement("audio");
+    persistentAudio.src = audioFilePath;
+    persistentAudio.id = "persistent-audio-player";
+    persistentAudio.loop = true;
+    persistentAudio.autoplay = true;
+    persistentAudio.volume = 1.0;
+    persistentAudio.muted = false; // Unmuted
+    document.body.appendChild(persistentAudio);
+    persistentAudio.play();
+    console.log("✅ Persistent audio player added.");
   } else {
-    // Ensure existing persistent player plays if it exists
-    const persistentAudioPlayer = document.getElementById("persistent-audio-player");
-    if (persistentAudioPlayer) {
-      persistentAudioPlayer.play();
-      console.log("✅ Persistent audio player already exists and is playing.");
-    }
+    console.log("✅ Persistent audio player already exists.");
+  }
+
+  // Ensure the audio player continues playing
+  const persistentAudio = document.getElementById("persistent-audio-player");
+  if (persistentAudio && !persistentAudio.paused) {
+    console.log("✅ Persistent audio player is already playing.");
   }
 })();
