@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+(function () {
   console.log("🎵 Core script running");
 
   // Check if the widget container exists
@@ -11,9 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
   } else {
     console.log("✅ Found #audio-widget-container");
   }
-
-  // Log if we reached the next step of creating the player
-  console.log("🛠 Creating the player...");
 
   // Create the audio player container
   const player = document.createElement("div");
@@ -85,4 +82,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Log to confirm everything was added to the DOM
   console.log("✅ Player added to DOM");
-});
+})();
