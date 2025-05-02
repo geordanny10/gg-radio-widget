@@ -90,5 +90,12 @@ console.log("🎵 Core script running");
       persistentAudio.play();
       console.log("✅ Persistent audio player added.");
     }
+  } else {
+    // Ensure existing persistent player plays if it exists
+    const persistentAudioPlayer = document.getElementById("persistent-audio-player");
+    if (persistentAudioPlayer) {
+      persistentAudioPlayer.play();
+      console.log("✅ Persistent audio player already exists and is playing.");
+    }
   }
 })();
