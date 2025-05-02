@@ -31,4 +31,32 @@ console.log("🎵 Core script running");
   const audio = document.createElement("audio");
   audio.controls = true;
   audio.autoplay = true;
-  audio.preload =
+  audio.preload = "auto";
+  audio.loop = true;
+  audio.muted = true;
+  audio.volume = 1.0;
+  console.log("🎧 Audio element created.");
+
+  const source = document.createElement("source");
+  source.src = "https://ggboda.com/wp-content/uploads/2025/03/Camilo-La-Boda.mp3";
+  source.type = "audio/mpeg";
+  audio.appendChild(source);
+  console.log("🎧 Source element added.");
+
+  player.appendChild(title);
+  player.appendChild(audio);
+  container.appendChild(player);
+  console.log("✅ Player added to DOM");
+
+  // Start muted autoplay
+  audio.play().then(() => {
+    console.log("✅ Autoplay started (muted)");
+  }).catch((e) => {
+    console.warn("⚠️ Autoplay blocked:", e);
+  });
+
+  // Reset to beginning on full reload
+  window.addEventListener("beforeunload", () => {
+    audio.currentTime = 0;
+  });
+})();
